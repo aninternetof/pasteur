@@ -5,7 +5,7 @@ import pytest
 
 create_user = True
 
-
+@pytest.mark.skip("Not fully implemented yet.")
 @pytest.mark.usefixtures("testapp")
 class TestLogin:
     def test_login(self, testapp):
