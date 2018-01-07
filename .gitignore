@@ -13,6 +13,7 @@ _mailinglist
 .idea/
 .DS_Store
 *.webassets-cache/
+database.db
 
 # Coverage reports
 htmlcov
