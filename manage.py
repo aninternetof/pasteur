@@ -35,17 +35,5 @@ def createdb():
 
     db.create_all()
 
-@manager.command
-def create_user(username, password):
-    """ Creates a new user
-    """
-
-    user = User(username, password)
-    db.session.add(user)
-    db.session.commit()
-
-    print("Created user {}".format(username))
-
-
 if __name__ == "__main__":
     manager.run()

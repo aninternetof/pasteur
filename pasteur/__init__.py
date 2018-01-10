@@ -12,8 +12,7 @@ from pasteur.models import db
 
 from pasteur.extensions import (
     cache,
-    login_manager,
-    oauth
+    login_manager
 )
 
 
@@ -37,12 +36,9 @@ def create_app(object_name):
     cache.init_app(app)
 
     # initialize SQLAlchemy
-
     db.init_app(app)
 
     login_manager.init_app(app)
-
-    oauth.init_app(app)
 
     # register our blueprints
     app.register_blueprint(main)
