@@ -6,8 +6,7 @@ from flask.ext.script import Manager, Server
 from flask.ext.script.commands import ShowUrls, Clean
 from pasteur import create_app
 from pasteur.models import db, User
-from pasteur.extensions import socketio
-from pasteur.tasks import thermostat
+from pasteur.extensions import socketio, thermostat
 
 # default to dev config because no one should use this in
 # production anyway
@@ -51,7 +50,7 @@ def run():
     """ Run with socketio
     """
     socketio.start_background_task(thermostat.run_thermostat)
-    socketio.run(app, port=5000, host='0.0.0.0')
+    socketio.run(app, port=5000, host='0.0.0.0', use_reloader=False)
 
 if __name__ == "__main__":
     manager.run()

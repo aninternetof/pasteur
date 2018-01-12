@@ -1,7 +1,7 @@
-from flask import Blueprint, request, redirect, url_for
+from flask import Blueprint, request, redirect, url_for, jsonify
 from flask.ext.login import login_user, logout_user
 
-from pasteur.extensions import cache, socketio
+from pasteur.extensions import cache, thermostat
 from pasteur.forms import LoginForm
 from pasteur.models import User
 
@@ -12,6 +12,17 @@ main = Blueprint('main', __name__)
 @cache.cached(timeout=1000)
 def home():
     return "Pasteur API root."
+
+
+@main.route('/api/v1/target-temp', methods=["GET", "POST"])
+def target_temp():
+    if request.method == 'POST':
+        value = request.get_json()['value']
+        thermostat.target_value = value
+        print(value)
+        return "Ok"
+    if request.method == 'GET':
+        return jsonify({'value': 42})
 
 
 @main.route("/login", methods=["GET", "POST"])
