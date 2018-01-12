@@ -1,7 +1,7 @@
 from flask import Blueprint, request, redirect, url_for
 from flask.ext.login import login_user, logout_user
 
-from pasteur.extensions import cache
+from pasteur.extensions import cache, socketio
 from pasteur.forms import LoginForm
 from pasteur.models import User
 

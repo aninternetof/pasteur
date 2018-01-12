@@ -6,6 +6,7 @@ from flask.ext.script import Manager, Server
 from flask.ext.script.commands import ShowUrls, Clean
 from pasteur import create_app
 from pasteur.models import db, User
+from pasteur.extensions import socketio
 
 # default to dev config because no one should use this in
 # production anyway
@@ -34,6 +35,22 @@ def createdb():
     """
 
     db.create_all()
+
+@manager.command
+def add_user(username, password):
+    """ Create user
+    """
+    user = User(username, password)
+    db.session.add(user)
+    db.session.commit()
+    print("Added user {}".format(username))
+
+@manager.command
+def run():
+    """ Run with socketio
+    """
+
+    socketio.run(app, port=5000, host='0.0.0.0')
 
 if __name__ == "__main__":
     manager.run()

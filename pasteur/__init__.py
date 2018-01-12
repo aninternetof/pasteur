@@ -12,7 +12,8 @@ from pasteur.models import db
 
 from pasteur.extensions import (
     cache,
-    login_manager
+    login_manager,
+    socketio
 )
 
 
@@ -42,5 +43,7 @@ def create_app(object_name):
 
     # register our blueprints
     app.register_blueprint(main)
+
+    socketio.init_app(app)
 
     return app
