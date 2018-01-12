@@ -11,18 +11,40 @@ main = Blueprint('main', __name__)
 @main.route('/api/v1')
 @cache.cached(timeout=1000)
 def home():
-    return "Pasteur API root."
+    return "Pasteur API root V1."
 
 
-@main.route('/api/v1/target-temp', methods=["GET", "POST"])
-def target_temp():
+@main.route('/api/v1/target-tempf', methods=["GET", "POST"])
+def target_tempf():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.target_value = value
+        thermostat.attributes['target_tempf'] = value
         print(value)
         return "Ok"
     if request.method == 'GET':
-        return jsonify({'value': 42})
+        return jsonify({'value': thermostat.attributes['target_tempf']})
+
+
+@main.route('/api/v1/period', methods=["GET", "POST"])
+def target_temp():
+    if request.method == 'POST':
+        value = request.get_json()['value']
+        thermostat.attributes['period'] = value
+        print(value)
+        return "Ok"
+    if request.method == 'GET':
+        return jsonify({'value': thermostat.attributes['period']})
+
+
+@main.route('/api/v1/target-degf-sec', methods=["GET", "POST"])
+def target_temp():
+    if request.method == 'POST':
+        value = request.get_json()['value']
+        thermostat.attributes['target_degf_sec'] = value
+        print(value)
+        return "Ok"
+    if request.method == 'GET':
+        return jsonify({'value': thermostat.attributes['target_degf_sec']})
 
 
 @main.route("/login", methods=["GET", "POST"])
