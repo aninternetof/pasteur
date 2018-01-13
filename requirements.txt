@@ -19,3 +19,7 @@ pytest
 pytest-cov
 mccabe
 flake8
+
+# Hardware
+python3-w1thermsensor
+gpiozero
