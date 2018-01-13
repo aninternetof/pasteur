@@ -39,7 +39,7 @@ def run_view():
         return "Not implemented yet", 501
     if request.method == 'POST':
         if not _verify_api_key(request):
-            return "Permission to API denied", 405
+            return "Permission to API denied", 403
         try:
             name = request.get_json()['name']
         except KeyError:
@@ -75,7 +75,7 @@ def sys_info_view():
 def enabled_view():
     if request.method == 'POST':
         if not _verify_api_key(request):
-            return "Permission to API denied", 405
+            return "Permission to API denied", 403
         if 'value' not in request.get_json(): return "Bad message", 400
         value = request.get_json()['value']
         thermostat.attributes['enabled'] = value
@@ -93,7 +93,7 @@ def enabled_view():
 def target_tempc_view():
     if request.method == 'POST':
         if not _verify_api_key(request):
-            return "Permission to API denied", 405
+            return "Permission to API denied", 403
         if 'value' not in request.get_json(): return "Bad message", 400
         value = request.get_json()['value']
         try:
@@ -110,7 +110,7 @@ def target_tempc_view():
 def period_s_view():
     if request.method == 'POST':
         if not _verify_api_key(request):
-            return "Permission to API denied", 405
+            return "Permission to API denied", 403
         if 'value' not in request.get_json(): return "Bad message", 400
         value = request.get_json()['value']
         try:
@@ -127,7 +127,7 @@ def period_s_view():
 def target_degc_minutes_view():
     if request.method == 'POST':
         if not _verify_api_key(request):
-            return "Permission to API denied", 405
+            return "Permission to API denied", 403
         if 'value' not in request.get_json(): return "Bad message", 400
         value = request.get_json()['value']
         try:
@@ -144,7 +144,7 @@ def target_degc_minutes_view():
 def bottom_margin_degc_view():
     if request.method == 'POST':
         if not _verify_api_key(request):
-            return "Permission to API denied", 405
+            return "Permission to API denied", 403
         if 'value' not in request.get_json(): return "Bad message", 400
         value = request.get_json()['value']
         try:
@@ -161,7 +161,7 @@ def bottom_margin_degc_view():
 def top_margin_degc_view():
     if request.method == 'POST':
         if not _verify_api_key(request):
-            return "Permission to API denied", 405
+            return "Permission to API denied", 403
         if 'value' not in request.get_json(): return "Bad message", 400
         value = request.get_json()['value']
         try:
@@ -182,7 +182,7 @@ def api_key_view():
     password = request.get_json()['password']
     user = User.query.filter_by(username=username).first()
     if not user:
-        return "Invalid credentials", 405
+        return "Invalid credentials", 403
     if user.check_password(password):
         key = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(24))
         if user.id not in api_keys:
@@ -191,5 +191,5 @@ def api_key_view():
             api_keys[user.id].append(key)
         return jsonify({'user_id': user.id, 'api_key': key})
     else:
-        return "Invalid credentials", 405
+        return "Invalid credentials", 403
 
