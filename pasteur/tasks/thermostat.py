@@ -3,9 +3,13 @@ from flask import json
 from datetime import datetime
 
 try:
+    from w1thermsensor import W1ThermSensor
+except Exception:
+    print("Failed to load W1ThermSensor. Apparently we're not on a Raspberry Pi")
+try:
     from gpiozero import LED
 except Exception:
-    print("Failed to load gpiozero. But not be on Raspberry Pi")
+    print("Failed to load gpiozero. Apparently we're not on a Raspberry Pi")
 
 
 
@@ -13,6 +17,10 @@ class Thermostat:
 
     def __init__(self, socketio):
         self.socketio = socketio
+        try:
+            self.sensor = W1ThermSensor()
+        except NameError:
+            pass
         try:
             self.pump = LED(21)
         except NameError:
@@ -34,7 +42,11 @@ class Thermostat:
     def run_thermostat(self):
         while True:
             print("Taking reading.")
-            self.attributes['temp_reading_degc'] = random.randint(0,100)
+            try:
+                self.attributes['temp_reading_degc'] = self.sensor.get_temperature()
+            except AttributeError:
+                print("Not on Raspberry Pi. Generating random temperature.")
+                self.attributes['temp_reading_degc'] = random.randint(0,100)
             self.attributes['timestamp'] = datetime.now()
             print(json.dumps(self.attributes))
             if self.attributes['enabled']:
