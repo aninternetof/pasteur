@@ -76,6 +76,7 @@ class Thermostat:
                     self.attributes['degc_minutes'] = 0
                     self.attributes['run_name'] = ''
                     self.attributes['log_file_path'] = '/tmp/pasteur_no_run.log'
+                    self.socketio.emit('event', json.dumps({'type': 'done'}))
 
                 with open(self.attributes['log_file_path'], 'a') as f:
                     f.write(json.dumps(self.attributes)+'\n')
