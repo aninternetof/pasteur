@@ -80,6 +80,12 @@ class Thermostat:
 
                 with open(self.attributes['log_file_path'], 'a') as f:
                     f.write(json.dumps(self.attributes)+'\n')
+            else:
+                try:
+                    self.pump.off()
+                except AttributeError:
+                    print("Not on Raspberry Pi. Cannot turn pump off.")
+
 
             self.socketio.emit('log', json.dumps(self.attributes))
             print(json.dumps(self.attributes))
