@@ -79,7 +79,8 @@ class Thermostat:
 
                 with open(self.attributes['log_file_path'], 'a') as f:
                     f.write(json.dumps(self.attributes)+'\n')
-                self.socketio.emit('log', json.dumps(self.attributes))
-                print(json.dumps(self.attributes))
+
+            self.socketio.emit('log', json.dumps(self.attributes))
+            print(json.dumps(self.attributes))
 
             self.socketio.sleep(self.attributes['period_s'])
