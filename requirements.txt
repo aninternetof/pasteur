@@ -21,5 +21,5 @@ mccabe
 flake8
 
 # Hardware
-python3-w1thermsensor
+w1thermsensor
 gpiozero
