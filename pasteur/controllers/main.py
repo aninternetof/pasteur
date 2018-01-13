@@ -1,4 +1,5 @@
 import os
+import netifaces as ni
 from datetime import datetime
 from flask import Blueprint, request, redirect, url_for, jsonify
 from flask.ext.login import login_user, logout_user
@@ -14,6 +15,7 @@ main = Blueprint('main', __name__)
 @cache.cached(timeout=1000)
 def home():
     return "Pasteur API root V1."
+
 
 @main.route('/api/v1/run', methods=["GET","POST"])
 def run_view():
@@ -33,6 +35,19 @@ def run_view():
         thermostat.attributes['name'] = name
         thermostat.attributes['log_file_path'] = log_file_path
         return "Created run {}".format(name)
+
+
+@main.route('/api/v1/sys-info', methods=["GET"])
+def sys_info_view():
+    ret = {};
+    ret['version'] = '0.1.0'
+    try:
+        ni.ifaddresses('wlan0')
+        ip = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
+        ret['ipaddr'] = ip
+    except ValueError:
+        ret['ipaddr'] = 'unknown'
+    return jsonify(ret)
 
 
 @main.route('/api/v1/enabled', methods=["GET", "POST"])
