@@ -46,7 +46,7 @@ class Thermostat:
                     except AttributeError:
                         print("Not on Raspberry Pi. Cannot turn pump on.")
                     a['pump_on'] = True
-                elif (a['temp_reading_degc'] < (a['target_temp_degc'] + a['bottom_margin_degc'])):
+                elif (a['temp_reading_degc'] > (a['target_temp_degc'] + a['bottom_margin_degc'])):
                     try:
                         self.pump.off();
                     except AttributeError:
