@@ -38,6 +38,10 @@ def enabled_view():
     if request.method == 'POST':
         value = request.get_json()['value']
         thermostat.attributes['enabled'] = value
+        if not value:
+            thermostat.attributes['degc_minutes'] = 0
+            thermostat.attributes['run_name'] = ''
+            thermostat.attributes['log_file_path'] = '/tmp/pasteur_no_run.log'
         print(value)
         return "Ok"
     if request.method == 'GET':
