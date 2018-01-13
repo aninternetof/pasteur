@@ -52,7 +52,7 @@ def target_tempc_view():
         print(value)
         return "Ok"
     if request.method == 'GET':
-        return jsonify({'value': thermostat.attributes['target_temp-degc']})
+        return jsonify({'value': thermostat.attributes['target_temp_degc']})
 
 
 @main.route('/api/v1/period', methods=["GET", "POST"])
