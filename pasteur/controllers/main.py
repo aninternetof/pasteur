@@ -21,8 +21,10 @@ def run_view():
         return "Not implemented yet", 501
     if request.method == 'POST':
         name = request.get_json()['name']
-        log_file_path = os.path.expanduser('~/Desktop/{}_name'
-                                           .format(datetime.now().strftime("%Y_%m_%d_%H_%M_%S"), name))
+        if 'root' in os.path.expanduser('~'):
+            log_file_path = '/var/log/Desktop/{}_name'.format(datetime.now().strftime("%Y_%m_%d_%H_%M_%S"), name)
+        else:
+            log_file_path = os.path.expanduser('~/Desktop/{}_name'.format(datetime.now().strftime("%Y_%m_%d_%H_%M_%S"), name))
         run = Run()
         run.name = name
         run.log_file_path = log_file_path
