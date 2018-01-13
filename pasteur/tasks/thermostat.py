@@ -34,7 +34,7 @@ class Thermostat:
     def run_thermostat(self):
         while True:
             print("Taking reading.")
-            self.attributes['tempc_reading'] = random.randint(0,100)
+            self.attributes['temp_reading_degc'] = random.randint(0,100)
             self.attributes['timestamp'] = datetime.now()
             print(json.dumps(self.attributes))
             if self.attributes['enabled']:
@@ -46,7 +46,7 @@ class Thermostat:
                         print("Not on Raspberry Pi. Cannot turn pump on.")
                     self.attributes['pump_on'] = True
                 elif self.attributes['temp_reading_degc'] > \
-                        (self.attributes['target_temp_degc'] + self.attributes['bottom_margin_degc']):
+                        (self.attributes['target_temp_degc'] + self.attributes['top_margin_degc']):
                     try:
                         self.pump.off();
                     except AttributeError:
