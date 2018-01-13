@@ -48,7 +48,7 @@ def enabled_view():
 def target_tempc_view():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['target_temp-degc'] = value
+        thermostat.attributes['target_temp_degc'] = value
         print(value)
         return "Ok"
     if request.method == 'GET':
