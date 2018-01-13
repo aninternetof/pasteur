@@ -14,19 +14,19 @@ def home():
     return "Pasteur API root V1."
 
 
-@main.route('/api/v1/target-tempf', methods=["GET", "POST"])
-def target_tempf():
+@main.route('/api/v1/target-tempc', methods=["GET", "POST"])
+def target_tempc():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['target_tempf'] = value
+        thermostat.attributes['target_tempc'] = value
         print(value)
         return "Ok"
     if request.method == 'GET':
-        return jsonify({'value': thermostat.attributes['target_tempf']})
+        return jsonify({'value': thermostat.attributes['target_tempc']})
 
 
 @main.route('/api/v1/period', methods=["GET", "POST"])
-def target_temp():
+def period():
     if request.method == 'POST':
         value = request.get_json()['value']
         thermostat.attributes['period'] = value
@@ -36,15 +36,37 @@ def target_temp():
         return jsonify({'value': thermostat.attributes['period']})
 
 
-@main.route('/api/v1/target-degf-sec', methods=["GET", "POST"])
-def target_temp():
+@main.route('/api/v1/target-degc-sec', methods=["GET", "POST"])
+def target_degc_sec():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['target_degf_sec'] = value
+        thermostat.attributes['target_degc_sec'] = value
         print(value)
         return "Ok"
     if request.method == 'GET':
-        return jsonify({'value': thermostat.attributes['target_degf_sec']})
+        return jsonify({'value': thermostat.attributes['target_degc_sec']})
+
+
+@main.route('/api/v1/bottom-margin-degc', methods=["GET", "POST"])
+def bottom_margin_degc():
+    if request.method == 'POST':
+        value = request.get_json()['value']
+        thermostat.attributes['bottom_margin_degc'] = value
+        print(value)
+        return "Ok"
+    if request.method == 'GET':
+        return jsonify({'value': thermostat.attributes['bottom_margin_degc']})
+
+
+@main.route('/api/v1/top-margin-degc', methods=["GET", "POST"])
+def top_margin_degc():
+    if request.method == 'POST':
+        value = request.get_json()['value']
+        thermostat.attributes['top_margin_degc'] = value
+        print(value)
+        return "Ok"
+    if request.method == 'GET':
+        return jsonify({'value': thermostat.attributes['top_margin_degc']})
 
 
 @main.route("/login", methods=["GET", "POST"])
