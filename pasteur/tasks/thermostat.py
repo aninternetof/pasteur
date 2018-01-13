@@ -38,20 +38,20 @@ class Thermostat:
             self.attributes['timestamp'] = datetime.now()
             print(json.dumps(self.attributes))
             if self.attributes['enabled']:
-                a = self.attributes
-                # TODO: a[temp_reading_degc] =
-                if (a['temp_reading_degc'] < (a['target_temp_degc'] - a['bottom_margin_degc'])):
+                if self.attributes['temp_reading_degc'] < \
+                        (self.attributes['target_temp_degc'] - self.attributes['bottom_margin_degc']):
                     try:
                         self.pump.on();
                     except AttributeError:
                         print("Not on Raspberry Pi. Cannot turn pump on.")
-                    a['pump_on'] = True
-                elif (a['temp_reading_degc'] > (a['target_temp_degc'] + a['bottom_margin_degc'])):
+                    self.attributes['pump_on'] = True
+                elif self.attributes['temp_reading_degc'] > \
+                        (self.attributes['target_temp_degc'] + self.attributes['bottom_margin_degc']):
                     try:
                         self.pump.off();
                     except AttributeError:
                         print("Not on Raspberry Pi. Cannot turn pump off.")
-                    a['pump_on'] = False
+                    self.attributes['pump_on'] = False
                 with open(self.attributes['log_file_path'], 'a') as f:
                     f.write(json.dumps(self.attributes)+'\n')
                 self.socketio.emit('log', json.dumps(self.attributes))
