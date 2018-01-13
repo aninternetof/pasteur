@@ -27,7 +27,7 @@ class Thermostat:
             pass
         self.attributes = {
             'temp_reading_degc': -1,
-            'period_s': 5,
+            'period_s': 2,
             'target_temp_degc': 100,
             'target_degc_minutes': 3000,
             'degc_minutes': 0,
