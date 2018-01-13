@@ -37,7 +37,7 @@ def run_view():
 def enabled_view():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['enabled'] = (value.lower() == 'true')
+        thermostat.attributes['enabled'] = value
         print(value)
         return "Ok"
     if request.method == 'GET':

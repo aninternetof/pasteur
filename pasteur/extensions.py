@@ -3,6 +3,7 @@ eventlet.monkey_patch()
 from flask.ext.cache import Cache
 from flask.ext.login import LoginManager
 from flask_socketio import SocketIO
+from flask_cors import CORS
 
 from pasteur.models import User
 
@@ -16,6 +17,8 @@ login_manager.login_view = "main.login"
 login_manager.login_message_category = "warning"
 
 socketio = SocketIO()
+
+cors = CORS()
 
 thermostat = Thermostat(socketio)
 

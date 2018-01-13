@@ -65,7 +65,7 @@ class Thermostat:
                     except AttributeError:
                         print("Not on Raspberry Pi. Cannot turn pump off.")
                     self.attributes['pump_on'] = False
-                self.attributes['degc_minutes'] += self.attributes['period_s']/60.0
+                self.attributes['degc_minutes'] += self.attributes['temp_reading_degc'] * self.attributes['period_s']/60.0
 
                 if self.attributes['degc_minutes'] >= self.attributes['target_degc_minutes']:
                     try:

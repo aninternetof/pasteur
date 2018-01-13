@@ -1,5 +1,6 @@
 #! ../env/bin/python
 # -*- coding: utf-8 -*-
+from flask_cors import CORS
 
 __author__ = 'Brady Hurlburt'
 __email__ = 'bradyhurlburt@gmail.com'
@@ -13,7 +14,8 @@ from pasteur.models import db
 from pasteur.extensions import (
     cache,
     login_manager,
-    socketio
+    socketio,
+    cors
 )
 
 
@@ -40,6 +42,8 @@ def create_app(object_name):
     db.init_app(app)
 
     login_manager.init_app(app)
+
+    CORS(app)
 
     # register our blueprints
     app.register_blueprint(main)

@@ -8,6 +8,7 @@ Flask-SQLAlchemy
 Flask-Script
 Flask-WTF
 flask-socketio
+flask-cors
 eventlet
 
 # Other
