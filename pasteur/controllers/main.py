@@ -37,7 +37,7 @@ def run_view():
 def enabled_view():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['enabled'] = value
+        thermostat.attributes['enabled'] = (value.lower() == 'true')
         print(value)
         return "Ok"
     if request.method == 'GET':
@@ -48,7 +48,10 @@ def enabled_view():
 def target_tempc_view():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['target_temp_degc'] = value
+        try:
+            thermostat.attributes['target_temp_degc'] = float(value)
+        except ValueError:
+            return "Invalid value", 400
         print(value)
         return "Ok"
     if request.method == 'GET':
@@ -59,7 +62,10 @@ def target_tempc_view():
 def period_view():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['period'] = value
+        try:
+            thermostat.attributes['period'] = float(value)
+        except ValueError:
+            return "Invalid value", 400
         print(value)
         return "Ok"
     if request.method == 'GET':
@@ -70,7 +76,10 @@ def period_view():
 def target_degc_sec_view():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['target_degc_sec'] = value
+        try:
+            thermostat.attributes['target_degc_sec'] = float(value)
+        except ValueError:
+            return "Invalid value", 400
         print(value)
         return "Ok"
     if request.method == 'GET':
@@ -81,7 +90,10 @@ def target_degc_sec_view():
 def bottom_margin_degc_view():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['bottom_margin_degc'] = value
+        try:
+            thermostat.attributes['bottom_margin_degc'] = float(value)
+        except ValueError:
+            return "Invalid value", 400
         print(value)
         return "Ok"
     if request.method == 'GET':
@@ -92,7 +104,10 @@ def bottom_margin_degc_view():
 def top_margin_degc_view():
     if request.method == 'POST':
         value = request.get_json()['value']
-        thermostat.attributes['top_margin_degc'] = value
+        try:
+            thermostat.attributes['top_margin_degc'] = float(value)
+        except ValueError:
+            return "Invalid value", 400
         print(value)
         return "Ok"
     if request.method == 'GET':
