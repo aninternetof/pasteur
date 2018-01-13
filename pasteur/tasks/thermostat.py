@@ -1,6 +1,7 @@
 import random
 from flask import json
 from datetime import datetime
+from math import pow
 
 try:
     from w1thermsensor import W1ThermSensor
@@ -27,7 +28,7 @@ class Thermostat:
             pass
         self.attributes = {
             'temp_reading_degc': -1,
-            'period_s': 2,
+            'period_s': 8,
             'target_temp_degc': 100,
             'target_degc_minutes': 3000,
             'degc_minutes': 0,
@@ -47,7 +48,7 @@ class Thermostat:
                 self.attributes['temp_reading_degc'] = self.sensor.get_temperature()
             except AttributeError:
                 print("Not on Raspberry Pi. Generating random temperature.")
-                self.attributes['temp_reading_degc'] = random.randint(0, 200)
+                self.attributes['temp_reading_degc'] = random.randint(20, 70)
             self.attributes['timestamp'] = datetime.now()
 
             if self.attributes['enabled']:
@@ -65,7 +66,9 @@ class Thermostat:
                     except AttributeError:
                         print("Not on Raspberry Pi. Cannot turn pump off.")
                     self.attributes['pump_on'] = False
-                self.attributes['degc_minutes'] += self.attributes['temp_reading_degc'] * self.attributes['period_s']/60.0
+                self.attributes['degc_minutes'] += pow(10, (self.attributes['temp_reading_degc'] - 60.0)/7.0) * self.attributes['period_s']/60.0
+                if self.attributes['degc_minutes'] < 0:
+                    self.attributes['degc_minutes'] = 0
 
                 if self.attributes['degc_minutes'] >= self.attributes['target_degc_minutes']:
                     try:
