@@ -9,7 +9,7 @@ class Thermostat:
         self.attributes = {
             'tempc_reading': -1,
             'period': 5,
-            'target_tempc': -1,
+            'target_temp-degc': -1,
             'target_degc_sec': -1,
             'top_margin_degc': -1,
             'bottom_margin_degc': -1,

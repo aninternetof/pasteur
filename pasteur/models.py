@@ -4,6 +4,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+class Run(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String())
+    log_file_path = db.Column(db.String())
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(), unique=True)
