@@ -58,32 +58,32 @@ def target_tempc_view():
         return jsonify({'value': thermostat.attributes['target_temp_degc']})
 
 
-@main.route('/api/v1/period', methods=["GET", "POST"])
-def period_view():
+@main.route('/api/v1/period_s', methods=["GET", "POST"])
+def period_s_view():
     if request.method == 'POST':
         value = request.get_json()['value']
         try:
-            thermostat.attributes['period'] = float(value)
+            thermostat.attributes['period_s'] = float(value)
         except ValueError:
             return "Invalid value", 400
         print(value)
         return "Ok"
     if request.method == 'GET':
-        return jsonify({'value': thermostat.attributes['period']})
+        return jsonify({'value': thermostat.attributes['period_s']})
 
 
-@main.route('/api/v1/target-degc-sec', methods=["GET", "POST"])
-def target_degc_sec_view():
+@main.route('/api/v1/target-degc-minutes', methods=["GET", "POST"])
+def target_degc_minutes_view():
     if request.method == 'POST':
         value = request.get_json()['value']
         try:
-            thermostat.attributes['target_degc_sec'] = float(value)
+            thermostat.attributes['target_degc_minutes'] = float(value)
         except ValueError:
             return "Invalid value", 400
         print(value)
         return "Ok"
     if request.method == 'GET':
-        return jsonify({'value': thermostat.attributes['target_degc_sec']})
+        return jsonify({'value': thermostat.attributes['target_degc_minutes']})
 
 
 @main.route('/api/v1/bottom-margin-degc', methods=["GET", "POST"])

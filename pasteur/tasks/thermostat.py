@@ -27,12 +27,13 @@ class Thermostat:
             pass
         self.attributes = {
             'temp_reading_degc': -1,
-            'period': 5,
-            'target_temp_degc': 50,
-            'target_degc_sec': -1,
+            'period_s': 5,
+            'target_temp_degc': 100,
+            'target_degc_minutes': 3000,
+            'degc_minutes': 0,
             'top_margin_degc': 1,
             'bottom_margin_degc': 1,
-            'enabled': True,
+            'enabled': False,
             'pump_on': False,
             'timestamp': None,
             'run_name': '',
@@ -46,25 +47,39 @@ class Thermostat:
                 self.attributes['temp_reading_degc'] = self.sensor.get_temperature()
             except AttributeError:
                 print("Not on Raspberry Pi. Generating random temperature.")
-                self.attributes['temp_reading_degc'] = random.randint(0,100)
+                self.attributes['temp_reading_degc'] = random.randint(0, 200)
             self.attributes['timestamp'] = datetime.now()
-            print(json.dumps(self.attributes))
+
             if self.attributes['enabled']:
                 if self.attributes['temp_reading_degc'] < \
                         (self.attributes['target_temp_degc'] - self.attributes['bottom_margin_degc']):
                     try:
-                        self.pump.on();
+                        self.pump.on()
                     except AttributeError:
                         print("Not on Raspberry Pi. Cannot turn pump on.")
                     self.attributes['pump_on'] = True
                 elif self.attributes['temp_reading_degc'] > \
                         (self.attributes['target_temp_degc'] + self.attributes['top_margin_degc']):
                     try:
-                        self.pump.off();
+                        self.pump.off()
                     except AttributeError:
                         print("Not on Raspberry Pi. Cannot turn pump off.")
                     self.attributes['pump_on'] = False
+                self.attributes['degc_minutes'] += self.attributes['period_s']/60.0
+
+                if self.attributes['degc_minutes'] >= self.attributes['target_degc_minutes']:
+                    try:
+                        self.pump.off()
+                    except AttributeError:
+                        print("Not on Raspberry Pi. Cannot turn pump off.")
+                    self.attributes['enabled'] = False
+                    self.attributes['degc_minutes'] = 0
+                    self.attributes['run_name'] = ''
+                    self.attributes['log_file_path'] = '/tmp/pasteur_no_run.log'
+
                 with open(self.attributes['log_file_path'], 'a') as f:
                     f.write(json.dumps(self.attributes)+'\n')
                 self.socketio.emit('log', json.dumps(self.attributes))
-            self.socketio.sleep(self.attributes['period'])
+                print(json.dumps(self.attributes))
+
+            self.socketio.sleep(self.attributes['period_s'])
