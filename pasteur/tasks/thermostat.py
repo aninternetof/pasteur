@@ -34,7 +34,8 @@ class Thermostat:
             'degc_minutes': 0,
             'top_margin_degc': 1,
             'bottom_margin_degc': 1,
-            'enabled': False,
+            'thermostat_enabled': False,
+            'run_enabled': False,
             'pump_on': False,
             'timestamp': None,
             'run_name': '',
@@ -51,7 +52,7 @@ class Thermostat:
                 self.attributes['temp_reading_degc'] = random.randint(20, 70)
             self.attributes['timestamp'] = datetime.now().isoformat()
 
-            if self.attributes['enabled']:
+            if self.attributes['thermostat_enabled']:
                 if self.attributes['temp_reading_degc'] < \
                         (self.attributes['target_temp_degc'] - self.attributes['bottom_margin_degc']):
                     try:
@@ -66,6 +67,13 @@ class Thermostat:
                     except AttributeError:
                         print("Not on Raspberry Pi. Cannot turn pump off.")
                     self.attributes['pump_on'] = False
+            else:
+                try:
+                    self.pump.off()
+                except AttributeError:
+                    print("Not on Raspberry Pi. Cannot turn pump off.")
+
+            if self.attributes['run_enabled']:
                 self.attributes['degc_minutes'] += pow(10, (self.attributes['temp_reading_degc'] - 60.0)/7.0) * self.attributes['period_s']/60.0
                 if self.attributes['degc_minutes'] < 0:
                     self.attributes['degc_minutes'] = 0
@@ -75,7 +83,7 @@ class Thermostat:
                         self.pump.off()
                     except AttributeError:
                         print("Not on Raspberry Pi. Cannot turn pump off.")
-                    self.attributes['enabled'] = False
+                    self.attributes['run_enabled'] = False
                     self.attributes['degc_minutes'] = 0
                     self.attributes['run_name'] = ''
                     self.attributes['log_file_path'] = '/tmp/pasteur_no_run.log'
@@ -83,11 +91,6 @@ class Thermostat:
 
                 with open(self.attributes['log_file_path'], 'a') as f:
                     f.write(json.dumps(self.attributes)+'\n')
-            else:
-                try:
-                    self.pump.off()
-                except AttributeError:
-                    print("Not on Raspberry Pi. Cannot turn pump off.")
 
 
             self.socketio.emit('log', json.dumps(self.attributes))
