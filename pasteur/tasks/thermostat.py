@@ -49,7 +49,7 @@ class Thermostat:
             except AttributeError:
                 print("Not on Raspberry Pi. Generating random temperature.")
                 self.attributes['temp_reading_degc'] = random.randint(20, 70)
-            self.attributes['timestamp'] = datetime.now()
+            self.attributes['timestamp'] = datetime.now().isoformat()
 
             if self.attributes['enabled']:
                 if self.attributes['temp_reading_degc'] < \
