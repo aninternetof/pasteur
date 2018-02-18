@@ -33,7 +33,7 @@ def _verify_api_key(request):
         return False
 
 
-@main.route('/api/v1/run', methods=["GET","POST"])
+@main.route('/api/v1/run', methods=["GET", "POST"])
 def run_view():
     if request.method == 'GET':
         return "Not implemented yet", 501
@@ -46,31 +46,39 @@ def run_view():
         except KeyError:
             return "Bad message", 400
         if enabled:
+            log_file_name = '{}_{}'.format(datetime.now().strftime("%Y_%m_%d_%H_%M_%S"), name)
             if 'root' in os.path.expanduser('~'):
-                log_file_path = '/var/log/{}_name'.format(datetime.now().strftime("%Y_%m_%d_%H_%M_%S"), name)
+                log_file_path = '/var/log/'
             else:
-                log_file_path = os.path.expanduser('~/Desktop/{}_name'.format(datetime.now().strftime("%Y_%m_%d_%H_%M_%S"), name))
+                log_file_path = os.path.expanduser('~/Desktop/')
             run = Run()
             run.name = name
-            run.log_file_path = log_file_path
+            run.log_file_path = '{}{}'.format(log_file_path, log_file_name)
             db.session.add(run)
             db.session.commit()
-            thermostat.attributes['name'] = name
+            thermostat.attributes['run_name'] = log_file_name
             thermostat.attributes['log_file_path'] = log_file_path
+            with open('{}{}.csv'.format(log_file_path, log_file_name), 'w') as f:
+                for key in sorted(thermostat.attributes.keys()):
+                    f.write('{},'.format(key))
+                f.write('\n')
             thermostat.attributes['run_enabled'] = True
             return "Created run {}".format(name)
         else:
+            src = '{}{}.csv'.format(thermostat.attributes['log_file_path'], thermostat.attributes['run_name'])
+            upload_dest = os.path.expanduser('~/Desktop/run_uploads/{}.csv'.format(thermostat.attributes['run_name']))
+            os.rename(src, upload_dest)
+            thermostat.attributes['log_file_path'] = '/tmp/'
+            thermostat.attributes['run_name'] = 'tmp_no_run'
             thermostat.attributes['run_enabled'] = False
             thermostat.attributes['degc_minutes'] = 0
-            thermostat.attributes['run_name'] = ''
-            thermostat.attributes['log_file_path'] = '/tmp/pasteur_no_run.log'
             return "Cancelled run {}".format(name)
 
 
 @main.route('/api/v1/sys-info', methods=["GET"])
 def sys_info_view():
     ret = {};
-    ret['version'] = '0.2.0'
+    ret['version'] = '0.3.0'
     try:
         ni.ifaddresses('wlan0')
         ip = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']

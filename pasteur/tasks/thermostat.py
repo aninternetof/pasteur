@@ -85,12 +85,14 @@ class Thermostat:
                         print("Not on Raspberry Pi. Cannot turn pump off.")
                     self.attributes['run_enabled'] = False
                     self.attributes['degc_minutes'] = 0
-                    self.attributes['run_name'] = ''
-                    self.attributes['log_file_path'] = '/tmp/pasteur_no_run.log'
+                    self.attributes['run_name'] = 'pasteur_no_run'
+                    self.attributes['log_file_path'] = '/tmp/'
                     self.socketio.emit('event', json.dumps({'type': 'done'}))
 
-                with open(self.attributes['log_file_path'], 'a') as f:
-                    f.write(json.dumps(self.attributes)+'\n')
+                with open('{}{}.csv'.format(self.attributes['log_file_path'], self.attributes['run_name']), 'a') as f:
+                    for _, val in sorted(self.attributes.items()):
+                        f.write('{},'.format(val))
+                    f.write('\n')
 
 
             self.socketio.emit('log', json.dumps(self.attributes))
