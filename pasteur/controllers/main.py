@@ -66,7 +66,10 @@ def run_view():
             return "Created run {}".format(name)
         else:
             src = '{}{}.csv'.format(thermostat.attributes['log_file_path'], thermostat.attributes['run_name'])
-            upload_dest = os.path.expanduser('~/Desktop/run_uploads/{}.csv'.format(thermostat.attributes['run_name']))
+            if 'root' in os.path.expanduser('~'):
+                upload_dest = os.path.expanduser('/home/pi/Desktop/run_uploads/{}.csv'.format(thermostat.attributes['run_name']))
+            else:
+                upload_dest = os.path.expanduser('~/Desktop/run_uploads/{}.csv'.format(thermostat.attributes['run_name']))
             os.rename(src, upload_dest)
             thermostat.attributes['log_file_path'] = '/tmp/'
             thermostat.attributes['run_name'] = 'tmp_no_run'
